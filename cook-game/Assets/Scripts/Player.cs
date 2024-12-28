@@ -1,16 +1,62 @@
+using System;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class Player : MonoBehaviour
 {
+    
+    public static Player Instance { get; private set; }
+    public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
+    public class OnSelectedCounterChangedEventArgs : EventArgs
+    {
+        public ClearCounter selectedCounter;
+    }
+    
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float rotationSpeed = 20f;
     [SerializeField] private GameInput gameInput;
+    [SerializeField] private LayerMask countersLayerMask;
     
     private bool isWalking;
+    private Vector3 lastInteractionDirection;
+    private ClearCounter selectedCounter;
+    
+    private void Awake()
+    {
+        if(Instance != null)
+        {
+            Debug.LogError("Another instance of Player already exists");
+        }
+        Instance = this;
+    }
+    private void Start()
+    {
+        gameInput.OnInteractAction += GameInput_OnInteractAction;
+    }
+    
+    private void GameInput_OnInteractAction(object sender, System.EventArgs e)
+    {
+       if(selectedCounter != null)
+       {
+           selectedCounter.Interact();
+       }
+    }
     
     private void Update()
     {
+        HandleMovement();
+        HandleInteractions();
+    }
+    
+    public bool IsWalking()
+    {
+        return isWalking;
+    }
+
+    private void HandleMovement()
+    {
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+        
         Vector3 moveVector = new Vector3(inputVector.x, 0f, inputVector.y);
         
         float playerHeight = 2f;
@@ -22,6 +68,7 @@ public class Player : MonoBehaviour
         if(!canMove)
         {
             Vector3 moveVectorX = new Vector3(moveVector.x, 0f, 0f).normalized;
+            
             canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveVectorX, moveDistance);
 
             if (canMove)
@@ -51,11 +98,48 @@ public class Player : MonoBehaviour
         
         transform.forward = Vector3.Slerp(transform.forward,moveVector,Time.deltaTime*rotationSpeed);
     }
-    
-    public bool IsWalking()
+
+    private void HandleInteractions()
     {
-        return isWalking;
+        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+        
+        Vector3 moveVector = new Vector3(inputVector.x, 0f, inputVector.y);
+        
+        float interactDistance = 2f;
+        
+        if(moveVector != Vector3.zero)
+        {
+            lastInteractionDirection = moveVector;
+        }
+        
+        var raycast = Physics.Raycast(transform.position, lastInteractionDirection, out RaycastHit raycastHit, interactDistance, countersLayerMask);
+        if (raycast)
+        {
+            if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter))
+            {
+                if(clearCounter != selectedCounter)
+                {
+                    OnSelectedCounter(clearCounter);
+                    Debug.Log("Selected counter");
+                }
+            }
+            else
+            {
+                OnSelectedCounter(null);
+            }
+        }
+        else
+        {
+            OnSelectedCounter(null);
+        }
     }
     
-    
+    private void OnSelectedCounter(ClearCounter selectedCounter)
+    {
+        this.selectedCounter = selectedCounter;
+        
+        OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs{selectedCounter = selectedCounter});
+    }
+
+
 }
