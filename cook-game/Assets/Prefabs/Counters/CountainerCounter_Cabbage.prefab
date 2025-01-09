@@ -48,41 +48,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1819272009767549990, guid: ea7f44e77de16ba4fa0f5f6f0c5e7993, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1819272009767549990, guid: ea7f44e77de16ba4fa0f5f6f0c5e7993, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1819272009767549990, guid: ea7f44e77de16ba4fa0f5f6f0c5e7993, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6156901549339340982, guid: ea7f44e77de16ba4fa0f5f6f0c5e7993, type: 3}
       propertyPath: kitchenObjectSO
       value: 
-      objectReference: {fileID: 11400000, guid: 39f8882943fa7e546a708302794d07d9, type: 2}
-    - target: {fileID: 6535745264336339115, guid: ea7f44e77de16ba4fa0f5f6f0c5e7993, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6535745264336339115, guid: ea7f44e77de16ba4fa0f5f6f0c5e7993, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6535745264336339115, guid: ea7f44e77de16ba4fa0f5f6f0c5e7993, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 0a21b4de1748aef4fb8dcfb4a54ee944, type: 2}
     - target: {fileID: 7323163865720954886, guid: ea7f44e77de16ba4fa0f5f6f0c5e7993, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 91e8fe3de9249fc44b7bdd8050062896, type: 3}
+      objectReference: {fileID: 21300000, guid: e1c23b5aded59d84da30738d3267a6c9, type: 3}
     - target: {fileID: 7793269898565538749, guid: ea7f44e77de16ba4fa0f5f6f0c5e7993, type: 3}
       propertyPath: m_Name
-      value: CountainerCounter_Tomato
+      value: CountainerCounter_Cabbage
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

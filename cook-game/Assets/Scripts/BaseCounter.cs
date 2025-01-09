@@ -11,6 +11,11 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
         Debug.LogError("Interact not implemented");
     }
     
+    public virtual void InteractAlternate(Player player)
+    {
+        Debug.LogError("InteractAlternate not implemented");
+    }
+    
     public void ClearKitchenObject()
     {
         kitchenObject = null;
