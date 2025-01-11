@@ -3,6 +3,7 @@ using UnityEngine;
 public class CuttingCounter : BaseCounter
 {
     [SerializeField] private CuttingRecipySO[] cuttingRecipySOArray;
+    private int cuttingProgress;
     public override void Interact(Player player)
     {
         if (!HasKitchenObject())
@@ -12,6 +13,7 @@ public class CuttingCounter : BaseCounter
                 if (HasRecipyWithInput(player.GetKitchenObject().GetKitchenObjectSO()))
                 {
                     player.GetKitchenObject().SetKitchenObjectParent(this);
+                    cuttingProgress = 0;
                 }
             }
         }
@@ -28,37 +30,51 @@ public class CuttingCounter : BaseCounter
     {
         if (HasKitchenObject() && HasRecipyWithInput(GetKitchenObject().GetKitchenObjectSO()))
         {
-            KitchenObjectSO resultKitchenObjectSO = GetResultKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
+            CuttingRecipySO cuttingRecipySO = GetCuttingRecipySOWithInput(GetKitchenObject().GetKitchenObjectSO());
             
-            GetKitchenObject().DestroySelf();
-            
-            KitchenObject.SpawnKitchenObject(resultKitchenObjectSO, this);
+            cuttingProgress++;
+            if (cuttingProgress >= cuttingRecipySO.cuttingProgressMax)
+            {
+                KitchenObjectSO resultKitchenObjectSO =
+                    GetResultKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
+
+                GetKitchenObject().DestroySelf();
+
+                KitchenObject.SpawnKitchenObject(resultKitchenObjectSO, this);
+            }
         }
     }
     
     private bool HasRecipyWithInput(KitchenObjectSO kitchenObjectSO)
     {
-        foreach (CuttingRecipySO cuttingRecipySO in cuttingRecipySOArray)
-        {
-            if (cuttingRecipySO.KitchenObjectSO == kitchenObjectSO)
-            {
-                return true;
-            }
-        }
+        CuttingRecipySO cuttingRecipySO = GetCuttingRecipySOWithInput(kitchenObjectSO);
         
-        return false;
+        return cuttingRecipySO != null;
     }
     
     private KitchenObjectSO GetResultKitchenObjectSO(KitchenObjectSO kitchenObjectSO)
     {
+        CuttingRecipySO cuttingRecipySO = GetCuttingRecipySOWithInput(kitchenObjectSO);
+
+        if (cuttingRecipySO != null)
+        {
+            return cuttingRecipySO.resultKitchenObjectSO;
+        }
+        
+        return null;
+    }
+    
+    private CuttingRecipySO GetCuttingRecipySOWithInput(KitchenObjectSO kitchenObjectSO)
+    {
         foreach (CuttingRecipySO cuttingRecipySO in cuttingRecipySOArray)
         {
-            if (cuttingRecipySO.KitchenObjectSO == kitchenObjectSO)
+            if (cuttingRecipySO.kitchenObjectSO == kitchenObjectSO)
             {
-                return cuttingRecipySO.ResultKitchenObjectSO;
+                return cuttingRecipySO;
             }
         }
         
         return null;
     }
+    
 }
