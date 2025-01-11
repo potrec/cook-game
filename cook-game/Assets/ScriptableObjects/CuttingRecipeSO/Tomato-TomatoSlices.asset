@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   kitchenObjectSO: {fileID: 11400000, guid: 39f8882943fa7e546a708302794d07d9, type: 2}
   resultKitchenObjectSO: {fileID: 11400000, guid: 4cae7570ae4bf364ba4f805df444b3cf, type: 2}
+  cuttingProgressMax: 3
