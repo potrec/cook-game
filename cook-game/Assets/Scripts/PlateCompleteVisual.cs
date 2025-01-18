@@ -31,7 +31,5 @@ public class PlateCompleteVisual : MonoBehaviour
                 kitchenObjectSOGameObject.gameObject.SetActive(true);
             }
         }
-        
-        Debug.LogError("No KitchenObjectSO_GameObject found for " + e.kitchenObjectSO.name);
     }
 }
