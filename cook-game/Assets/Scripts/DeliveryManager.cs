@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class DeliveryManager : MonoBehaviour
 {
+    public event EventHandler OnRecipeSpawned;
+    public event EventHandler OnRecipeCompleted;
     public static DeliveryManager Instance { get; private set; }
     [SerializeField] private RecipeListSO recipeListSO;
     private List<RecipeSO> waitingRecipeSOList;
@@ -26,8 +29,9 @@ public class DeliveryManager : MonoBehaviour
             if(waitingRecipeSOList.Count < waitingRecipeMax)
             {
                 RecipeSO waitingRecipeSO = recipeListSO.recipeSOList[Random.Range(0, recipeListSO.recipeSOList.Count)];
-                Debug.Log($"New recipe: {waitingRecipeSO.recipyName}");
                 waitingRecipeSOList.Add(waitingRecipeSO);
+                
+                OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
             }
         }
     }
@@ -59,13 +63,20 @@ public class DeliveryManager : MonoBehaviour
                 }
                 if (isRecipeMatch)
                 {
-                    Debug.Log($"Recipe match: {waitingRecipeSO.recipyName}");
                     waitingRecipeSOList.Remove(waitingRecipeSO);
+                    
+                    OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
+                    
                     return;
                 }
             }
         }
         
         Debug.Log("Recipe not match");
+    }
+    
+    public List<RecipeSO> GetWaitingRecipeSOList()
+    {
+        return waitingRecipeSOList;
     }
 }
