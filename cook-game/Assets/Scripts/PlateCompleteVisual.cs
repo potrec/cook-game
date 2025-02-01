@@ -29,6 +29,7 @@ public class PlateCompleteVisual : MonoBehaviour
             if (kitchenObjectSOGameObject.kitchenObjectSO == e.kitchenObjectSO)
             {
                 kitchenObjectSOGameObject.gameObject.SetActive(true);
+                SoundManager.Instance.PlaySound(SoundManager.Instance.audioClipRefsSO.objectPickup, transform.position);
             }
         }
     }

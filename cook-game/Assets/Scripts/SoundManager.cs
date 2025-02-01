@@ -3,7 +3,20 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    [SerializeField] private AudioClipRefsSO audioClipRefsSO;
+    public AudioClipRefsSO audioClipRefsSO;
+    public static SoundManager Instance { get; private set; }
+    
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     
     private void Start()
     {
@@ -35,6 +48,7 @@ public class SoundManager : MonoBehaviour
     
     private void Player_OnPickedSomething(object sender, EventArgs e)
     {
+        Debug.Log("Player picked something");
         PlaySound(audioClipRefsSO.objectPickup, Player.Instance.transform.position);
     }
     
@@ -59,7 +73,7 @@ public class SoundManager : MonoBehaviour
         AudioSource.PlayClipAtPoint(audioClip, position, volume);
     }
     
-    private void PlaySound(AudioClip[] audioClipArray, Vector3 position, float volume = 1f)
+    public void PlaySound(AudioClip[] audioClipArray, Vector3 position, float volume = 1f)
     {
         PlaySound(audioClipArray[UnityEngine.Random.Range(0, audioClipArray.Length)], position, volume);
     }
