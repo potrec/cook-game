@@ -15,6 +15,7 @@ public class DeliveryManagerUI : MonoBehaviour
     {
         DeliveryManager.Instance.OnRecipeSpawned += DeliveryManager_OnRecipeSpawned;
         DeliveryManager.Instance.OnRecipeCompleted += DeliveryManager_OnRecipeCompleted;
+        DeliveryManager.Instance.OnRecipeTimeOut += DeliveryManager_OnRecipeTimeOut;
         
         UpdateVisuals();
     }
@@ -29,19 +30,25 @@ public class DeliveryManagerUI : MonoBehaviour
         UpdateVisuals();
     }
     
+    private void DeliveryManager_OnRecipeTimeOut(object sender, EventArgs e)
+    {
+        UpdateVisuals();
+    }
+    
     private void UpdateVisuals()
     {
         foreach (Transform child in container)
         {
-            if(child == recipeTemplate) continue;
+            if (child == recipeTemplate) continue;
             Destroy(child.gameObject);
         }
 
-        foreach (RecipeSO recipeSO in DeliveryManager.Instance.GetWaitingRecipeSOList())
+        foreach (DeliveryRecipe recipe in DeliveryManager.Instance.GetWaitingDeliveryRecipeList())
         {
+            Debug.Log($"Instantiating {recipe.recipeSO.recipeName} time left: {recipe.timeLeftToDeliver}");
             Transform recipeTransform = Instantiate(recipeTemplate, container);
             recipeTransform.gameObject.SetActive(true);
-            recipeTransform.GetComponent<DeliveryManagerSingleUI>().SetRecipeSO(recipeSO);
+            recipeTransform.GetComponent<DeliveryManagerSingleUI>().SetDeliveryRecipe(recipe);
         }
     }
 }
